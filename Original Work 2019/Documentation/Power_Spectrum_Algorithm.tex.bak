@@ -1,0 +1,61 @@
+\documentclass[12pt]{article}
+
+% Page formatting. 
+\usepackage[a4paper,top=2cm,bottom=2cm,left=2cm,right=2cm,marginparwidth=1.75cm]{geometry}
+\usepackage[parfill]{parskip}
+
+% Typesetting for mathematics.
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{tikz-cd}
+
+% Image Formatting
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{subfig}
+
+%============================================================================================================================
+ 
+\begin{document}
+
+\section{Power Spectrum Algorithm}
+
+This is a detailed analysis of the algorithm used to calculate the integrand of the one halo power spectrum contribution given in equation (\ref{INT}). 
+\begin{equation} \label{INT}
+    P_{1h,Int}(M, k) = \frac{dn}{dM} [r_{s}(M)^3 \delta_a(M) \bar{u} (kr_s)]^2
+\end{equation}
+The function is initially called with the first argument being a 64-bit floating point number for the mass $M$ in units of $kg$ and the second argument being a 64-bit floating point number for the wavenumber $k$ in units of $Mpc^{-1}$. First, the concentration parameter $c(M)$ is called, given in equation (\ref{CP}), to reduce the number of function calls in following calculations. 
+\begin{equation} \label{CP}
+	c(M) = 
+	\begin{cases}
+		5\sigma(M) & M/M_0 < 10^{14} \\
+		9\sigma(M) & M/M_0 \geq 10^{14} \\
+	\end{cases}
+\end{equation}
+It is defined piece-wise such that for $M/M_\odot < 10^{14}$ then $5\sigma(M)$ is returned, else if $M/M_\odot \geq 10^{14}$ $9\sigma(M)$ is returned and stored as the variable $cp$. Next, the scale radius $r_s(M)$ is called and is given in equation (\ref{SR}).
+\begin{equation} \label{SR}
+    r_s(M) = \frac{1}{c(M)} \Big(\frac{3M}{800 \pi \rho_0} \Big)^{1/3}
+\end{equation}
+It takes the parameters $M$ and $cp$. The mean density of the universe $\rho_0$ has units of $kg / m^3$ so $r_s$ returns a value with units of meters and is stored in the variable $sr$. The next function we will observe is for $\delta_a(M)$ which is given in equation (\ref{DA}).
+\begin{equation} \label{DA}
+	\delta_a(M) = 
+	\begin{cases}
+		200c^{3} / 3[ln(1+c) - c/(1+c)] & M/M_0 < 10^{14} \\
+		100c^{3} / ln(1+c^{3/2})          & M/M_0 > 10^{14}
+	\end{cases}
+\end{equation}
+It takes parameters $M$ and $cp$. Similar to the function for the concentration parameter, if  $M/M_\odot < 10^{14}$ then the delta function for the NFW profile is returned, else if  $M/M_\odot \geq 10^{14}$ then the delta function for the Moore profile is returned.
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+

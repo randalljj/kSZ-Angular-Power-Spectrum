@@ -1,0 +1,99 @@
+Author: Jesse Randall
+
+##### Tue Jan 15 22:52:34 STD 2019
+The work I have done thus far consists of me reproducing results in Dr. Cooney's PHD dissertation and checking for any potential errors. Currently I am trying to graph figure 5-2 in Chapter 5 on page 48. It is the 'Linear rms fluctuation of the density contrast as a function of the mass within a top hat window'.
+
+Current issue is trying to integrate the integrand due to fluctuations in the functional value. Also units appear to be off.
+Plan is to:
+(1) Fix the unit error. Causing values to be smaller than anticipated.
+(2) Find a way to numerically integrate the integrand. Current thoughts are to fit a function to the points at the peaks before each trough in the area that normal numerical integration has trouble with due to the sharp changes in the functional values. Then integrate that function in the problem area as the troughs are nearly vertical. Should give a reasonable approximation.
+
+Searching Ryden's book on Cosmology for value of density of the universe. Value I have now is off of google/wikipedia. Found value of 'average matter density of the universe as a whole is rho_0 = 2.7x10^-27 kg/m^3' (Ryden pg 11) which was 1 order of magnitude larger than the value I had previously which made the previous issue worse as the values I am plotting are even smaller now.
+##### Tue Jan 15 23:37:29 STD 2019
+
+##### Wed Jan 16 10:47:55 STD 2019
+Searching through code to find any mistakes.
+Have some questions regardin the units on k and whether I need to convert them for certain areas.
+Haven't found anything that looks out of place so not sure how to continue.
+##### Wed Jan 16 11:59:54 STD 2019
+
+##### Fri Jan 18 09:15:25 STD 2019
+I'm going to move onto looking into how to integrate the integrand now and ask Dr. Cooney about the potential units issue.
+
+For the oscillatory integrand someone suggested that special methods would be required and that the package MPMath has a routine that could help. Looking into that. What I found seems to only apply to periodic functions or special cases of them. Doesn't look like that will help. Came across a paper on how to integrate highly oscillating integrals using several methods. Reading it now.
+
+Working on breaking the integral into simpler pieces to try and apply one of the oscillatory numerical integration routines I have found.
+##### Fri Jan 18 11:08:09 STD 2019
+
+##### Wed Feb 13 09:18:06 STD 2019
+Eventually got the graph to look as expected with approximate methods of integration and removing term that was the cause of differences in magnitude between my graph and the one in Dr. Cooney's paper.
+
+Now moved onto the power spectrum which contains a bias function that Dr. Cooney has tasked me with understanding its importance by convincing him that it is necessary to have.
+
+Mo/White Paper:
+Problem: Understand how the spatial distribution of galaxies is related to that of the underlying mass. Authors showed that if galaxies can be associated with high peaks of the initial Gaussian density field, then they should be more clustered than the mass, an effect usually called GALAXY BIASING. However, it is not known how well galaxies correspond to high peaks of the initial field, and there is direct evidence that the correspondence of peaks with dark haloes is not particularly good. In particular, it is unclear how to deal with the problems that a single dark halo often contains several peaks, and that the present day clustering of peaks differs substantially from that in the initial (Lagrangian) space as a result of gravitationally induced motions. Substantial progress in overcoming these difficulties has recently been made by Bond & Myers (1995a, b) in their 'peak-patch picture'. In the present paper, however, we follow a less rigorous but simpler and more easily implemented route.
+
+The PS theory developed in the above papers does not provide a model for the spatial clustering of dark haloes, butit is easily extended to construct such a model. We use the standard PS formalism both to define dark haloes from the initial density field and to specify how their mean abundance within a large spherical region is modulated by the linear mass overdensity in that region. We then treat the gravitationally induced evolution of clustering by assuming that each region evolves as if spherically symmetric. Section 2 lays out this model in detail, and shows how it can be used to calculate statistical properties of the clustering of dark haloes as a function of their massand of the epoch at which they are identified. Section 3 then presents detailed tests of these predictions against a variety of large N-body simulations. Finally, in Section 4 we discuss how our model might be used to understand biasing of the galaxy distribution with respect to that of the mass, and how these methods may help in reconstructing the cosmic mass distribution from observations. 
+##### Wed Feb 13 12:17:55 STD 2019
+
+##### Fri Mar  8 11:32:01 STD 2019
+Need to start using this more often. Keep forgetting to log the work I have done. 
+
+I accomplished my previous task with the bias function and have now moved onto plotting the non-linear power spectrum. It consists of "two distinct contributions, a one-halo term, from particles within the same halo, and a halo-halo term, from particles in two separate halos." (Cooney) They are found in Fry and Ma (2000) so I am reading that now. 
+
+Current Questions:
+1) What is the dn/dM term in both contributions?
+2) What is the \delta_a term in both contributions?
+3) What is the \tilde{u} term in both contributions?
+
+Variables/Functions:
+M = Halo mass
+dM = Differential halo mass element
+n = number density of halos
+dn = Differential
+\bar{\delta}(M) = Dimensionless density amplitude. Depends on halo mass
+R_s(M) = characteristic radius. Depends on halo mass
+\bar{\rho} = mean background density
+u(x) = Functional form for density profile. Two are considered. u_{I}(x) and u_{II}(x). Both exhibit same limiting behavior.
+u_{I}(x) = \frac{1}{x^p(1+x)^{3-p}}
+u_{II} (x) = \frac{1}{x^p(1+x^{3-p})}
+
+c = R_{200}/R_{s} concentration parameter. Can be used to quantify central density of halo. (Navarro el al. 1997) For type I typically c_{I} \in (1,10) while for type II c_{II} \approx c_{I}/3.
+R_{200} = radius within which the average density is 200 times mean density.
+
+Choose M = 800 \pi \bar{\rho} R_{200}^3 / 3 then
+R_s(M) = \frac{1}{c} (\frac{3M}{800 \pi \bar{\rho}})^{1/3}
+\bar{\delta}_{I}(M) = frac{200c^3}{3[ln(1+c) - c/(1+c)]}, p=1
+\bar{\delta}_{II}(M) = \frac{100c^3}{ln(1+c^{3/2})}, p=3/2
+
+##### Fri Mar 15 16:32:25 DST 2019 
+
+S2.2 Halo Mass Function: Describes what dn/dlnM is (Number density of halos with mass M within a logarthmic interval). Gives formula for \sigma^2(M).
+
+S2.3 Halo-Halo Correlations: DM halos do not cluster in the same way the mass density field does. Bias parameter is used to account for that. Presents formula for b(M), the three-point correlation function/fourier transform (bispectrum).
+
+S3 Two-Point statistics
+The two-point correllation function measures the excess probability above the Poisson distribution of finding a pair of objects with separation r (Peebles 1980). Can express correlation function for density field in terms of properties of dark matter halos; has two contributions, one from particle pairs in the same halo, and the other from pairs that reside in two different halos. Dark matter halos exhibit a spectrum of masses that can be characterized by a distribution function dn/dM and the halo centers are spatially correlated.
+
+Now I have answers to the questions I posed previously. I have a name and funciton for (2) and (3) but I still don't know the functional form of (1), dn/dM (distribution function), so I'm not sure what to do with that. Will look into it later.
+##### Fri Mar 15 17:42:39 DST 2019
+
+##### Mon Mar 25 14:43:55 DST 2019
+Need to figure out how to properly code R0 and c as they depend on each other and they only give an estimate of c for both mass functions.
+
+Need to determine what the mixed halo profile is as only NFW and Moore are talked about in Ma and Fry (2000). No mention of it is made in Cooney's dissertation either.
+
+Running into issues with numerical differentiation. Don't know what step size to use to avoid significant error due to roundoff.
+#####
+
+##### Wed Apr  3 11:13:33 DST 2019
+I figured out how to code R0 and c properly. The mixed halo profile just uses NFW for M < 1e14 M/M0 then switches to Moore.
+
+I believe the numerical differentiation issues I am encountering is due to the step size estimate that I have been using. It is the multiplication of the point at which the derivative is evaluated at with the machine epsilon of the order 2.2e-16. Since the order of the point that I am evaluating the derivative at is from 1e42 to 1e51 the step size is not << 1 causing the finite difference method to fail. However, choosing a step size << 1 runs into issues with roundoff error as there is only finite precision with floating point numbers. Subtracting something with magnitude 1e-16 from 1e42 to 1e51 results in zero for the derivative as the output is just the point where the derivative is being calculated.
+
+I'm not sure how to resolve this issue but if it can be fixed then this method should work fine.
+##### Wed Apr  3 12:02:58 DST 2019
+
+
+
+
