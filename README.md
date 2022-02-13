@@ -9,4 +9,4 @@ Hoping to finsih this project in the next couple months and am glad to be doing 
 
 The badge below will open a cloud based Jupyter Notebook server where you can run the code from your browser without having to install a full Python environment. Currently, it isn't working because they do not have the Python libraries I am running including NumPy and SciPy. I believe I have to include them with the project for them to import properly and am looking into it. If you just want to see the output of the Jupyter Notebook, you can click on the file and GitHub will open it in viewer for you.
 
-My Binder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/randalljj/kSZ-Angular-Power-Spectrum/tree/main/HEAD)
+My Binder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/randalljj/kSZ-Angular-Power-Spectrum/HEAD)
